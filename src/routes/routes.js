@@ -2,6 +2,21 @@ const express = require("express");
 const router = express.Router();
 //const db= require("../models");
 const meetingController = require("../controller/meeting");
+const {check, validationResult} = require('express-validator/check');
+
+
+
+router.get('/meetings', meetingController.getAll);
+
+router.post('/meetings',[
+    check('name').not().isEmpty(),
+    check('email').isEmail(),
+    check('phno').not().isEmpty().isLength({min: 10,max: 10}),
+    check('start_date').not().isEmpty()
+],meetingController.createNew);
+
+module.exports=router;
+
 
 /*router.get('/meetings', (req,res) => {
     //db.Patient.findAll().then(users => res.send(users));
@@ -26,9 +41,3 @@ router.post('/meetings', (req,res) => {
         "data": []
     }));
 });*/
-
-router.get('/meetings' ,meetingController.getAll);
-
-router.post('/meetings',meetingController.createNew);
-
-module.exports=router;
